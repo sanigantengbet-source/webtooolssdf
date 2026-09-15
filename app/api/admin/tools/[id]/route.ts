@@ -74,27 +74,29 @@ export async function PUT(
 
     // Normalize inputs - allow every field to be completely optional
     const rawName = typeof body.name === 'string' ? body.name.trim() : '';
-    const finalName = rawName || 'Untitled Tool';
 
     const rawSlug = typeof body.slug === 'string' ? body.slug.trim().toLowerCase() : '';
     let slugToUse =
       rawSlug ||
-      finalName
+      rawName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)+/g, '') ||
       `tool-${Date.now()}`;
 
+    const rawDesc = String(body.description ?? '').trim();
+    const rawShortDesc = String(body.short_description ?? body.shortDescription ?? '').trim() || (rawDesc ? rawDesc.slice(0, 160) : '');
+
     const normalizedData = {
-      name: finalName,
+      name: rawName,
       slug: slugToUse,
-      short_description: String(body.short_description ?? body.shortDescription ?? '').trim(),
-      description: String(body.description ?? '').trim(),
-      website_url: String(body.website_url ?? body.websiteUrl ?? '').trim(),
-      github_url: String(body.github_url ?? body.githubUrl ?? '').trim(),
-      documentation_url: String(body.documentation_url ?? body.documentationUrl ?? '').trim(),
-      logo_url: String(body.logo_url ?? body.logoUrl ?? '').trim(),
-      thumbnail_url: String(body.thumbnail_url ?? body.thumbnailUrl ?? '').trim(),
+      short_description: rawShortDesc,
+      description: rawDesc,
+      website_url: body.website_url ?? body.websiteUrl ?? '',
+      github_url: body.github_url ?? body.githubUrl ?? '',
+      documentation_url: body.documentation_url ?? body.documentationUrl ?? '',
+      logo_url: body.logo_url ?? body.logoUrl ?? '',
+      thumbnail_url: body.thumbnail_url ?? body.thumbnailUrl ?? '',
       status: body.status || 'active',
       is_featured: Boolean(body.is_featured ?? body.isFeatured ?? false),
       sort_order: Number(body.sort_order ?? body.sortOrder ?? 0),
@@ -114,7 +116,7 @@ export async function PUT(
 
     if (!parseResult.success) {
       return NextResponse.json(
-        { error: parseResult.error.issues[0]?.message || 'Validation failed' },
+        { error: parseResult.error.issues[0]?.message || 'Validasi gagal' },
         { status: 400 }
       );
     }
@@ -141,9 +143,9 @@ export async function PUT(
       .select('id')
       .eq('slug', slugToUse)
       .neq('id', id)
-      .single();
+      .maybeSingle();
 
-    if (conflict) {
+    if (conflict && conflict.id) {
       slugToUse = `${slugToUse}-${Date.now().toString(36)}`;
     }
 
@@ -155,7 +157,7 @@ export async function PUT(
         slug: slugToUse,
         short_description: short_description || '',
         description: description || '',
-        website_url: website_url || '',
+        website_url: website_url,
         github_url: github_url || '',
         documentation_url: documentation_url || '',
         logo_url: logo_url || '',
@@ -173,23 +175,31 @@ export async function PUT(
     }
 
     // 2. Update category junctions (delete existing and insert new)
-    await supabase.from('tool_categories').delete().eq('tool_id', id);
-    if (category_ids && category_ids.length > 0) {
-      const catInserts = category_ids.map((catId: string) => ({
-        tool_id: id,
-        category_id: catId,
-      }));
-      await supabase.from('tool_categories').insert(catInserts);
+    try {
+      await supabase.from('tool_categories').delete().eq('tool_id', id);
+      if (category_ids && category_ids.length > 0) {
+        const catInserts = category_ids.map((catId: string) => ({
+          tool_id: id,
+          category_id: catId,
+        }));
+        await supabase.from('tool_categories').insert(catInserts);
+      }
+    } catch (catErr) {
+      console.warn('Error updating tool categories:', catErr);
     }
 
     // 3. Update tag junctions (delete existing and insert new)
-    await supabase.from('tool_tags').delete().eq('tool_id', id);
-    if (tag_ids && tag_ids.length > 0) {
-      const tagInserts = tag_ids.map((tagId: string) => ({
-        tool_id: id,
-        tag_id: tagId,
-      }));
-      await supabase.from('tool_tags').insert(tagInserts);
+    try {
+      await supabase.from('tool_tags').delete().eq('tool_id', id);
+      if (tag_ids && tag_ids.length > 0) {
+        const tagInserts = tag_ids.map((tagId: string) => ({
+          tool_id: id,
+          tag_id: tagId,
+        }));
+        await supabase.from('tool_tags').insert(tagInserts);
+      }
+    } catch (tagErr) {
+      console.warn('Error updating tool tags:', tagErr);
     }
 
     // 4. Audit Log
