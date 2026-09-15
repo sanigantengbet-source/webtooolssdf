@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useSyncExternalStore } from 'react';
+import React, { createContext, useContext, useEffect, useSyncExternalStore } from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -16,17 +16,39 @@ const ThemeContext = createContext<ThemeContextType>({
   setTheme: () => {},
 });
 
-function getSavedTheme(): Theme {
-  if (typeof window === 'undefined') return 'system';
-  const saved = localStorage.getItem('tool-collection-theme') as Theme | null;
-  if (saved && (saved === 'light' || saved === 'dark' || saved === 'system')) {
-    return saved;
+const THEME_CHANGE_EVENT = 'tool-collection-theme-change';
+
+function subscribeTheme(callback: () => void) {
+  window.addEventListener('storage', callback);
+  window.addEventListener(THEME_CHANGE_EVENT, callback);
+  return () => {
+    window.removeEventListener('storage', callback);
+    window.removeEventListener(THEME_CHANGE_EVENT, callback);
+  };
+}
+
+function getThemeClientSnapshot(): Theme {
+  try {
+    const saved = localStorage.getItem('tool-collection-theme');
+    if (saved === 'light' || saved === 'dark' || saved === 'system') {
+      return saved;
+    }
+  } catch {
+    // Ignore storage access errors
   }
   return 'system';
 }
 
+function getThemeServerSnapshot(): Theme {
+  return 'system';
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(getSavedTheme);
+  const theme = useSyncExternalStore(
+    subscribeTheme,
+    getThemeClientSnapshot,
+    getThemeServerSnapshot
+  );
 
   // Subscribe to system preference
   const systemDark = useSyncExternalStore(
@@ -52,8 +74,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [resolvedTheme]);
 
   const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('tool-collection-theme', newTheme);
+    try {
+      localStorage.setItem('tool-collection-theme', newTheme);
+      window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+    } catch {
+      // Ignore storage access errors
+    }
   };
 
   return (
