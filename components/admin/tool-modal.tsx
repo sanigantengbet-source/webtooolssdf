@@ -1,0 +1,513 @@
+'use client';
+
+import React, { useState, useRef } from 'react';
+import { X, Upload, Loader2, AlertCircle, Image as ImageIcon } from 'lucide-react';
+import type { Tool, Category, Tag } from '@/lib/types';
+
+interface ToolModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSaved: () => void;
+  toolToEdit: Tool | null;
+  categories: Category[];
+  tags: Tag[];
+}
+
+function ToolFormContent({
+  onClose,
+  onSaved,
+  toolToEdit,
+  categories,
+  tags,
+}: Omit<ToolModalProps, 'isOpen'>) {
+  const [name, setName] = useState(toolToEdit?.name || '');
+  const [slug, setSlug] = useState(toolToEdit?.slug || '');
+  const [shortDescription, setShortDescription] = useState(toolToEdit?.short_description || '');
+  const [description, setDescription] = useState(toolToEdit?.description || '');
+  const [logoUrl, setLogoUrl] = useState(toolToEdit?.logo_url || '');
+  const [thumbnailUrl, setThumbnailUrl] = useState(toolToEdit?.thumbnail_url || '');
+  const [websiteUrl, setWebsiteUrl] = useState(toolToEdit?.website_url || '');
+  const [githubUrl, setGithubUrl] = useState(toolToEdit?.github_url || '');
+  const [documentationUrl, setDocumentationUrl] = useState(toolToEdit?.documentation_url || '');
+  const [status, setStatus] = useState<'active' | 'maintenance' | 'coming_soon' | 'archived'>(
+    toolToEdit?.status || 'active'
+  );
+  const [isFeatured, setIsFeatured] = useState(toolToEdit?.is_featured || false);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>(
+    (toolToEdit?.categories || []).map((c) => c.id)
+  );
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>(
+    (toolToEdit?.tags || []).map((t) => t.id)
+  );
+
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const [isUploadingThumb, setIsUploadingThumb] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const logoFileRef = useRef<HTMLInputElement>(null);
+  const thumbFileRef = useRef<HTMLInputElement>(null);
+
+  // Auto-generate slug from name if creating new
+  const handleNameChange = (val: string) => {
+    setName(val);
+    if (!toolToEdit) {
+      const generated = val
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)+/g, '');
+      setSlug(generated);
+    }
+  };
+
+  const handleFileUpload = async (
+    file: File,
+    folder: 'logos' | 'thumbnails',
+    onSuccess: (url: string) => void,
+    setLoading: (loading: boolean) => void
+  ) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', folder);
+
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to upload asset.');
+      } else {
+        onSuccess(data.url);
+      }
+    } catch {
+      setError('Network error during asset upload.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setError('Tool name is required.');
+      return;
+    }
+    if (!slug.trim()) {
+      setError('Slug is required.');
+      return;
+    }
+    if (!description.trim()) {
+      setError('Description is required.');
+      return;
+    }
+
+    setIsSaving(true);
+    setError(null);
+
+    const payload = {
+      name: name.trim(),
+      slug: slug.trim().toLowerCase(),
+      shortDescription: shortDescription.trim() || undefined,
+      description: description.trim(),
+      logoUrl: logoUrl.trim() || undefined,
+      thumbnailUrl: thumbnailUrl.trim() || undefined,
+      websiteUrl: websiteUrl.trim() || undefined,
+      githubUrl: githubUrl.trim() || undefined,
+      documentationUrl: documentationUrl.trim() || undefined,
+      status,
+      isFeatured,
+      categoryIds: selectedCategoryIds,
+      tagIds: selectedTagIds,
+    };
+
+    try {
+      const url = toolToEdit
+        ? `/api/admin/tools/${toolToEdit.id}`
+        : '/api/admin/tools';
+      const method = toolToEdit ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to save tool.');
+        setIsSaving(false);
+        return;
+      }
+
+      onSaved();
+      onClose();
+    } catch {
+      setError('Network error while saving tool.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="relative w-full max-w-2xl bg-white dark:bg-[#111111] border border-[#eaeaea] dark:border-[#27272a] rounded-lg shadow-xl my-8">
+      {/* Modal Header */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-[#eaeaea] dark:border-[#27272a]">
+        <h2 className="text-base font-semibold text-[#171717] dark:text-[#ededed]">
+          {toolToEdit ? 'Edit Tool' : 'Add New Tool'}
+        </h2>
+        <button
+          onClick={onClose}
+          className="p-1 rounded text-[#666666] dark:text-[#a1a1a1] hover:text-black dark:hover:text-white"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Modal Body */}
+      <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+        {error && (
+          <div className="p-3 rounded bg-red-500/10 border border-red-500/20 text-xs text-red-700 dark:text-red-400 flex items-start gap-2">
+            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Name & Slug */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-medium mb-1">
+              Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => handleNameChange(e.target.value)}
+              placeholder="Next.js"
+              className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1">
+              Slug <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              placeholder="nextjs"
+              className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white font-mono"
+            />
+          </div>
+        </div>
+
+        {/* Short Description */}
+        <div>
+          <label className="block text-xs font-medium mb-1">Short Description</label>
+          <input
+            type="text"
+            value={shortDescription}
+            onChange={(e) => setShortDescription(e.target.value)}
+            placeholder="The React framework for the web."
+            className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+          />
+        </div>
+
+        {/* Full Description */}
+        <div>
+          <label className="block text-xs font-medium mb-1">
+            Full Description <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            rows={4}
+            required
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Detailed description of the tool, features, and capabilities..."
+            className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+          />
+        </div>
+
+        {/* Status & Featured */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-medium mb-1">Status</label>
+            <select
+              value={status}
+              onChange={(e) =>
+                setStatus(
+                  e.target.value as 'active' | 'maintenance' | 'coming_soon' | 'archived'
+                )
+              }
+              className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+            >
+              <option value="active">Active</option>
+              <option value="maintenance">Maintenance</option>
+              <option value="coming_soon">Coming Soon</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+
+          <div className="flex items-center pt-5">
+            <label className="flex items-center gap-2 text-xs font-medium cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isFeatured}
+                onChange={(e) => setIsFeatured(e.target.checked)}
+                className="rounded border-zinc-300 text-black focus:ring-black"
+              />
+              <span>Featured Tool (pinned to top)</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Asset Upload: Logo & Thumbnail */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+          {/* Logo */}
+          <div>
+            <label className="block text-xs font-medium mb-1">Logo URL or Upload</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={logoUrl}
+                onChange={(e) => setLogoUrl(e.target.value)}
+                placeholder="https://... or upload"
+                className="flex-1 px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+              />
+              <input
+                ref={logoFileRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    handleFileUpload(file, 'logos', setLogoUrl, setIsUploadingLogo);
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => logoFileRef.current?.click()}
+                disabled={isUploadingLogo}
+                className="px-2.5 py-2 rounded text-xs border border-[#eaeaea] dark:border-[#27272a] hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] text-[#666666] dark:text-[#a1a1a1] flex items-center gap-1"
+                title="Upload logo to Supabase Storage"
+              >
+                {isUploadingLogo ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Upload className="h-3.5 w-3.5" />
+                )}
+              </button>
+            </div>
+            {logoUrl && (
+              <div className="mt-2 flex items-center gap-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={logoUrl}
+                  alt="Logo preview"
+                  className="h-8 w-8 object-contain rounded border border-[#eaeaea] dark:border-[#27272a] p-0.5 bg-white dark:bg-[#181818]"
+                />
+                <span className="text-[11px] text-[#666666] dark:text-[#a1a1a1]">
+                  Logo attached
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Thumbnail */}
+          <div>
+            <label className="block text-xs font-medium mb-1">
+              Thumbnail URL or Upload
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={thumbnailUrl}
+                onChange={(e) => setThumbnailUrl(e.target.value)}
+                placeholder="https://... or upload"
+                className="flex-1 px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+              />
+              <input
+                ref={thumbFileRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    handleFileUpload(file, 'thumbnails', setThumbnailUrl, setIsUploadingThumb);
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => thumbFileRef.current?.click()}
+                disabled={isUploadingThumb}
+                className="px-2.5 py-2 rounded text-xs border border-[#eaeaea] dark:border-[#27272a] hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] text-[#666666] dark:text-[#a1a1a1] flex items-center gap-1"
+                title="Upload thumbnail to Supabase Storage"
+              >
+                {isUploadingThumb ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Upload className="h-3.5 w-3.5" />
+                )}
+              </button>
+            </div>
+            {thumbnailUrl && (
+              <div className="mt-2 flex items-center gap-2">
+                <ImageIcon className="h-4 w-4 text-zinc-500" />
+                <span className="text-[11px] text-[#666666] dark:text-[#a1a1a1]">
+                  Thumbnail attached
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* URLs */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <div>
+            <label className="block text-xs font-medium mb-1">Website URL</label>
+            <input
+              type="url"
+              value={websiteUrl}
+              onChange={(e) => setWebsiteUrl(e.target.value)}
+              placeholder="https://example.com"
+              className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1">GitHub URL</label>
+            <input
+              type="url"
+              value={githubUrl}
+              onChange={(e) => setGithubUrl(e.target.value)}
+              placeholder="https://github.com/..."
+              className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1">Documentation URL</label>
+            <input
+              type="url"
+              value={documentationUrl}
+              onChange={(e) => setDocumentationUrl(e.target.value)}
+              placeholder="https://docs.example.com"
+              className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+            />
+          </div>
+        </div>
+
+        {/* Categories Multi-Select */}
+        <div>
+          <label className="block text-xs font-medium mb-1.5">Categories</label>
+          <div className="flex flex-wrap gap-1.5 p-2 rounded border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#181818] max-h-32 overflow-y-auto">
+            {categories.map((cat) => {
+              const isSelected = selectedCategoryIds.includes(cat.id);
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategoryIds((prev) =>
+                      isSelected ? prev.filter((id) => id !== cat.id) : [...prev, cat.id]
+                    );
+                  }}
+                  className={`px-2 py-1 rounded text-xs transition-colors ${
+                    isSelected
+                      ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black font-medium'
+                      : 'bg-white dark:bg-[#202020] text-[#666666] dark:text-[#a1a1a1] border border-[#eaeaea] dark:border-[#27272a]'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Tags Multi-Select */}
+        <div>
+          <label className="block text-xs font-medium mb-1.5">Tags</label>
+          <div className="flex flex-wrap gap-1.5 p-2 rounded border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#181818] max-h-32 overflow-y-auto">
+            {tags.map((tag) => {
+              const isSelected = selectedTagIds.includes(tag.id);
+              return (
+                <button
+                  key={tag.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedTagIds((prev) =>
+                      isSelected ? prev.filter((id) => id !== tag.id) : [...prev, tag.id]
+                    );
+                  }}
+                  className={`px-2 py-1 rounded text-xs font-mono transition-colors ${
+                    isSelected
+                      ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black font-medium'
+                      : 'bg-white dark:bg-[#202020] text-[#666666] dark:text-[#a1a1a1] border border-[#eaeaea] dark:border-[#27272a]'
+                  }`}
+                >
+                  #{tag.name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Form Actions */}
+        <div className="pt-4 border-t border-[#eaeaea] dark:border-[#27272a] flex items-center justify-end gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] hover:bg-[#fafafa] dark:hover:bg-[#181818] text-[#171717] dark:text-[#ededed]"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isSaving}
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded bg-[#171717] text-white dark:bg-[#ededed] dark:text-black hover:opacity-90 disabled:opacity-50"
+          >
+            {isSaving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+            <span>{toolToEdit ? 'Update Tool' : 'Create Tool'}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export function ToolModal({
+  isOpen,
+  onClose,
+  onSaved,
+  toolToEdit,
+  categories,
+  tags,
+}: ToolModalProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+      <ToolFormContent
+        key={toolToEdit ? toolToEdit.id : 'new'}
+        onClose={onClose}
+        onSaved={onSaved}
+        toolToEdit={toolToEdit}
+        categories={categories}
+        tags={tags}
+      />
+    </div>
+  );
+}
