@@ -1,29 +1,35 @@
 import { z } from 'zod';
 
-// URL validator ensuring only safe protocols (http/https)
+// URL validator ensuring only safe protocols (http/https) or optional/empty
 const safeUrlSchema = z
   .string()
   .trim()
+  .optional()
+  .or(z.literal(''))
   .refine(
     (url) => {
-      if (!url) return true;
+      if (!url || url.trim() === '') return true;
       try {
-        const parsed = new URL(url);
-        return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+        const testUrl =
+          url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')
+            ? url
+            : `https://${url}`;
+        const parsed = new URL(testUrl, 'http://localhost');
+        return (
+          parsed.protocol === 'https:' ||
+          parsed.protocol === 'http:' ||
+          url.startsWith('/')
+        );
       } catch {
         return false;
       }
     },
-    { message: 'URL must start with http:// or https://' }
+    { message: 'URL must be a valid web address' }
   );
 
 export const passwordPolicySchema = z
   .string()
-  .min(12, 'Password must be at least 12 characters long')
-  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-  .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-  .regex(/[0-9]/, 'Password must contain at least one number')
-  .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character');
+  .min(6, 'Password must be at least 6 characters long');
 
 export const loginSchema = z.object({
   username: z
@@ -38,33 +44,35 @@ export const toolSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, 'Tool name must be at least 2 characters')
-    .max(100, 'Tool name must not exceed 100 characters'),
+    .max(100, 'Tool name must not exceed 100 characters')
+    .optional()
+    .default(''),
   slug: z
     .string()
     .trim()
-    .min(2, 'Slug must be at least 2 characters')
     .max(100, 'Slug must not exceed 100 characters')
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase alphanumeric and hyphens only'),
+    .optional()
+    .default(''),
   short_description: z
     .string()
     .trim()
-    .max(255, 'Short description cannot exceed 255 characters'),
-  description: z.string().trim().min(5, 'Full description is required'),
-  website_url: safeUrlSchema.refine((url) => Boolean(url && url.length > 0), {
-    message: 'A valid website URL is required',
-  }),
-  github_url: safeUrlSchema.optional().or(z.literal('')),
-  documentation_url: safeUrlSchema.optional().or(z.literal('')),
-  logo_url: safeUrlSchema.optional().or(z.literal('')),
-  thumbnail_url: safeUrlSchema.optional().or(z.literal('')),
-  status: z.enum(['active', 'maintenance', 'coming_soon', 'archived'], {
-    message: 'Invalid status selected',
-  }),
-  is_featured: z.boolean().default(false),
-  sort_order: z.coerce.number().int().default(0),
-  category_ids: z.array(z.string().uuid()).default([]),
-  tag_ids: z.array(z.string().uuid()).default([]),
+    .max(500, 'Short description cannot exceed 500 characters')
+    .optional()
+    .default(''),
+  description: z.string().trim().optional().default(''),
+  website_url: safeUrlSchema.optional().default(''),
+  github_url: safeUrlSchema.optional().default(''),
+  documentation_url: safeUrlSchema.optional().default(''),
+  logo_url: safeUrlSchema.optional().default(''),
+  thumbnail_url: safeUrlSchema.optional().default(''),
+  status: z
+    .enum(['active', 'maintenance', 'coming_soon', 'archived'])
+    .optional()
+    .default('active'),
+  is_featured: z.boolean().optional().default(false),
+  sort_order: z.coerce.number().int().optional().default(0),
+  category_ids: z.array(z.string()).optional().default([]),
+  tag_ids: z.array(z.string()).optional().default([]),
 });
 
 export const categorySchema = z.object({
