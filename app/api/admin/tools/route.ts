@@ -90,8 +90,47 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const body = await req.json();
-    const parseResult = toolSchema.safeParse(body);
+    const body = await req.json().catch(() => ({}));
+
+    // Normalize inputs - allow every field to be completely optional
+    const rawName = typeof body.name === 'string' ? body.name.trim() : '';
+    const finalName = rawName || 'Untitled Tool';
+
+    const rawSlug = typeof body.slug === 'string' ? body.slug.trim().toLowerCase() : '';
+    let slugToUse =
+      rawSlug ||
+      finalName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)+/g, '') ||
+      `tool-${Date.now()}`;
+
+    const normalizedData = {
+      name: finalName,
+      slug: slugToUse,
+      short_description: String(body.short_description ?? body.shortDescription ?? '').trim(),
+      description: String(body.description ?? '').trim(),
+      website_url: String(body.website_url ?? body.websiteUrl ?? '').trim(),
+      github_url: String(body.github_url ?? body.githubUrl ?? '').trim(),
+      documentation_url: String(body.documentation_url ?? body.documentationUrl ?? '').trim(),
+      logo_url: String(body.logo_url ?? body.logoUrl ?? '').trim(),
+      thumbnail_url: String(body.thumbnail_url ?? body.thumbnailUrl ?? '').trim(),
+      status: body.status || 'active',
+      is_featured: Boolean(body.is_featured ?? body.isFeatured ?? false),
+      sort_order: Number(body.sort_order ?? body.sortOrder ?? 0),
+      category_ids: Array.isArray(body.category_ids)
+        ? body.category_ids
+        : Array.isArray(body.categoryIds)
+        ? body.categoryIds
+        : [],
+      tag_ids: Array.isArray(body.tag_ids)
+        ? body.tag_ids
+        : Array.isArray(body.tagIds)
+        ? body.tagIds
+        : [],
+    };
+
+    const parseResult = toolSchema.safeParse(normalizedData);
 
     if (!parseResult.success) {
       return NextResponse.json(
@@ -102,7 +141,6 @@ export async function POST(req: NextRequest) {
 
     const {
       name,
-      slug,
       short_description,
       description,
       website_url,
@@ -117,18 +155,15 @@ export async function POST(req: NextRequest) {
       tag_ids,
     } = parseResult.data;
 
-    // Check slug uniqueness
+    // Check slug uniqueness - if conflict, auto-append unique suffix instead of failing
     const { data: existingSlug } = await supabase
       .from('tools')
       .select('id')
-      .eq('slug', slug)
+      .eq('slug', slugToUse)
       .single();
 
     if (existingSlug) {
-      return NextResponse.json(
-        { error: `A tool with slug '${slug}' already exists` },
-        { status: 409 }
-      );
+      slugToUse = `${slugToUse}-${Date.now().toString(36)}`;
     }
 
     // 1. Insert tool
@@ -136,10 +171,10 @@ export async function POST(req: NextRequest) {
       .from('tools')
       .insert({
         name,
-        slug,
-        short_description,
-        description,
-        website_url,
+        slug: slugToUse,
+        short_description: short_description || '',
+        description: description || '',
+        website_url: website_url || '',
         github_url: github_url || '',
         documentation_url: documentation_url || '',
         logo_url: logo_url || '',
@@ -185,7 +220,7 @@ export async function POST(req: NextRequest) {
       targetType: 'tool',
       targetId: toolId,
       adminId: admin.user.id,
-      metadata: { name, slug, status },
+      metadata: { name, slug: slugToUse, status },
       clientIp,
     });
 
