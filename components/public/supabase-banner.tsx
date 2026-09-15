@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Database, AlertCircle, ArrowRight, X } from 'lucide-react';
+import { Database, ArrowRight, X } from 'lucide-react';
 
 interface SupabaseBannerProps {
   isConfigured: boolean;
