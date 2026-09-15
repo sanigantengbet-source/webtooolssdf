@@ -3,6 +3,7 @@ import { Navbar } from '@/components/public/navbar';
 import { Hero } from '@/components/public/hero';
 import { PublicToolsView } from '@/components/public/public-tools-view';
 import { SupabaseBanner } from '@/components/public/supabase-banner';
+import { Footer } from '@/components/public/footer';
 import { getSupabaseEnv } from '@/lib/supabase/config';
 import { getServerSupabase } from '@/lib/supabase/server';
 import { getServiceRoleSupabase } from '@/lib/supabase/service-role';
@@ -101,14 +102,7 @@ export default async function HomePage() {
         />
       </main>
 
-      <footer className="border-t border-[#eaeaea] dark:border-[#27272a] py-6 text-xs text-[#666666] dark:text-[#a1a1a1]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© {new Date().getFullYear()} Tool Collection. Built for developers.</p>
-          <div className="flex items-center gap-4">
-            <span>Powered by Next.js & Supabase</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
