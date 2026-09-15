@@ -12,6 +12,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { Navbar } from '@/components/public/navbar';
+import { Footer } from '@/components/public/footer';
 import { getServerSupabase } from '@/lib/supabase/server';
 import { getServiceRoleSupabase } from '@/lib/supabase/service-role';
 import type { Tool } from '@/lib/types';
@@ -334,6 +335,7 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
