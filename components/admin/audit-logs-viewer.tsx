@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShieldCheck, Filter, RefreshCw, Calendar, Clock, Terminal } from 'lucide-react';
+import { Filter, RefreshCw, Clock, Terminal } from 'lucide-react';
 import type { AuditLog } from '@/lib/types';
 
 interface AuditLogsViewerProps {
