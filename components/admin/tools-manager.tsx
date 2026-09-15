@@ -11,8 +11,6 @@ import {
   ExternalLink,
   Star,
   RefreshCw,
-  Layers,
-  Clock,
 } from 'lucide-react';
 import { ToolModal } from './tool-modal';
 import { DeleteConfirmModal } from './delete-confirm-modal';
