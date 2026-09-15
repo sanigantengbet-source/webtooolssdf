@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Wrench, Search, Shield, Menu, X } from 'lucide-react';
+import { Wrench, Search, Shield, Menu, X, Github, MessageCircle } from 'lucide-react';
 import { ThemeToggle } from '../ui/theme-toggle';
 
 interface NavbarProps {
@@ -36,16 +36,34 @@ export function Navbar({ onSearchClick }: NavbarProps) {
               Tools
             </Link>
             <Link
-              href="#categories"
+              href="/#categories"
               className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               Categories
             </Link>
+            <a
+              href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
+            >
+              <MessageCircle className="h-3.5 w-3.5 text-emerald-500" />
+              <span>Saluran</span>
+            </a>
+            <a
+              href="https://github.com/sannnproject"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
+            >
+              <Github className="h-3.5 w-3.5" />
+              <span>GitHub</span>
+            </a>
           </nav>
         </div>
 
-        {/* Right side: Search, Theme Toggle, Admin link */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Right side: Search, Quick Socials, Theme Toggle, Admin link */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {onSearchClick && (
             <button
               onClick={onSearchClick}
@@ -60,6 +78,29 @@ export function Navbar({ onSearchClick }: NavbarProps) {
               </kbd>
             </button>
           )}
+
+          {/* Social quick action buttons (desktop) */}
+          <a
+            href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="WhatsApp Channel"
+            aria-label="WhatsApp Channel"
+            className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-md border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#eaeaea] dark:hover:bg-[#1a1a1a] transition-colors"
+          >
+            <MessageCircle className="h-4 w-4 text-emerald-500" />
+          </a>
+
+          <a
+            href="https://github.com/sannnproject"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub Profile"
+            aria-label="GitHub Profile"
+            className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-md border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#eaeaea] dark:hover:bg-[#1a1a1a] transition-colors"
+          >
+            <Github className="h-4 w-4" />
+          </a>
 
           <ThemeToggle />
 
@@ -86,29 +127,51 @@ export function Navbar({ onSearchClick }: NavbarProps) {
 
       {/* Mobile dropdown drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#0a0a0a] px-4 py-3 space-y-2">
+        <div className="md:hidden border-t border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#0a0a0a] px-4 py-3 space-y-1.5">
           <Link
             href="/"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-1.5 text-sm text-[#171717] dark:text-[#ededed]"
+            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
           >
             Tools
           </Link>
           <Link
-            href="#categories"
+            href="/#categories"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-1.5 text-sm text-[#171717] dark:text-[#ededed]"
+            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
           >
             Categories
           </Link>
-          <Link
-            href="/admin"
+          <a
+            href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center gap-2 py-1.5 text-sm font-medium text-[#171717] dark:text-[#ededed]"
+            className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-emerald-600 dark:hover:text-emerald-400"
           >
-            <Shield className="h-4 w-4" />
-            Admin Dashboard
-          </Link>
+            <MessageCircle className="h-4 w-4 text-emerald-500" />
+            <span>Saluran WhatsApp</span>
+          </a>
+          <a
+            href="https://github.com/sannnproject"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-zinc-600 dark:hover:text-zinc-300"
+          >
+            <Github className="h-4 w-4" />
+            <span>GitHub</span>
+          </a>
+          <div className="pt-2 border-t border-[#eaeaea] dark:border-[#27272a]">
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 py-2 text-sm font-medium text-[#171717] dark:text-[#ededed]"
+            >
+              <Shield className="h-4 w-4 text-zinc-500" />
+              <span>Admin Dashboard</span>
+            </Link>
+          </div>
         </div>
       )}
     </header>
