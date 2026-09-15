@@ -1,31 +1,56 @@
 import { z } from 'zod';
 
+// Helper to normalize URLs (auto prepends https:// if protocol is omitted)
+export const normalizeWebUrl = (val: unknown): string => {
+  if (val === null || val === undefined) return '';
+  let str = String(val).trim();
+  if (!str) return '';
+  if (!str.startsWith('http://') && !str.startsWith('https://') && !str.startsWith('/')) {
+    str = `https://${str}`;
+  }
+  return str;
+};
+
+// Required website URL validator
+const requiredWebsiteUrlSchema = z.preprocess(
+  (val) => normalizeWebUrl(val),
+  z
+    .string()
+    .min(1, 'Link web wajib diisi')
+    .refine(
+      (url) => {
+        if (!url || url.trim() === '') return true; // Handled by min(1)
+        try {
+          const parsed = new URL(url, 'http://localhost');
+          return parsed.protocol === 'https:' || parsed.protocol === 'http:' || url.startsWith('/');
+        } catch {
+          return false;
+        }
+      },
+      { message: 'Link web harus berupa alamat URL yang valid (contoh: https://example.com)' }
+    )
+);
+
 // URL validator ensuring only safe protocols (http/https) or optional/empty
-const safeUrlSchema = z
-  .string()
-  .trim()
-  .optional()
-  .or(z.literal(''))
-  .refine(
-    (url) => {
-      if (!url || url.trim() === '') return true;
-      try {
-        const testUrl =
-          url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')
-            ? url
-            : `https://${url}`;
-        const parsed = new URL(testUrl, 'http://localhost');
-        return (
-          parsed.protocol === 'https:' ||
-          parsed.protocol === 'http:' ||
-          url.startsWith('/')
-        );
-      } catch {
-        return false;
-      }
-    },
-    { message: 'URL must be a valid web address' }
-  );
+export const safeUrlSchema = z.preprocess(
+  (val) => normalizeWebUrl(val),
+  z
+    .string()
+    .optional()
+    .default('')
+    .refine(
+      (url) => {
+        if (!url || url.trim() === '') return true;
+        try {
+          const parsed = new URL(url, 'http://localhost');
+          return parsed.protocol === 'https:' || parsed.protocol === 'http:' || url.startsWith('/');
+        } catch {
+          return false;
+        }
+      },
+      { message: 'URL harus berupa alamat web yang valid' }
+    )
+);
 
 export const passwordPolicySchema = z
   .string()
@@ -41,38 +66,54 @@ export const loginSchema = z.object({
 });
 
 export const toolSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .max(100, 'Tool name must not exceed 100 characters')
-    .optional()
-    .default(''),
-  slug: z
-    .string()
-    .trim()
-    .max(100, 'Slug must not exceed 100 characters')
-    .optional()
-    .default(''),
-  short_description: z
-    .string()
-    .trim()
-    .max(500, 'Short description cannot exceed 500 characters')
-    .optional()
-    .default(''),
-  description: z.string().trim().optional().default(''),
-  website_url: safeUrlSchema.optional().default(''),
-  github_url: safeUrlSchema.optional().default(''),
-  documentation_url: safeUrlSchema.optional().default(''),
-  logo_url: safeUrlSchema.optional().default(''),
-  thumbnail_url: safeUrlSchema.optional().default(''),
-  status: z
-    .enum(['active', 'maintenance', 'coming_soon', 'archived'])
-    .optional()
-    .default('active'),
-  is_featured: z.boolean().optional().default(false),
-  sort_order: z.coerce.number().int().optional().default(0),
-  category_ids: z.array(z.string()).optional().default([]),
-  tag_ids: z.array(z.string()).optional().default([]),
+  name: z.preprocess(
+    (val) => (val === null || val === undefined ? '' : String(val).trim()),
+    z
+      .string()
+      .min(1, 'Nama tool wajib diisi')
+      .max(100, 'Nama tool maksimal 100 karakter')
+  ),
+  slug: z.preprocess(
+    (val) => (val === null || val === undefined ? '' : String(val).trim().toLowerCase()),
+    z.string().optional().default('')
+  ),
+  short_description: z.preprocess(
+    (val) => (val === null || val === undefined ? '' : String(val).trim()),
+    z
+      .string()
+      .max(500, 'Deskripsi singkat tidak boleh melebihi 500 karakter')
+      .optional()
+      .default('')
+  ),
+  description: z.preprocess(
+    (val) => (val === null || val === undefined ? '' : String(val).trim()),
+    z.string().min(1, 'Deskripsi tool wajib diisi')
+  ),
+  website_url: requiredWebsiteUrlSchema,
+  github_url: safeUrlSchema,
+  documentation_url: safeUrlSchema,
+  logo_url: safeUrlSchema,
+  thumbnail_url: safeUrlSchema,
+  status: z.preprocess(
+    (val) => (val ? String(val) : 'active'),
+    z.enum(['active', 'maintenance', 'coming_soon', 'archived']).optional().default('active')
+  ),
+  is_featured: z.preprocess(
+    (val) => Boolean(val),
+    z.boolean().optional().default(false)
+  ),
+  sort_order: z.preprocess(
+    (val) => (val === undefined || val === null || val === '' ? 0 : Number(val)),
+    z.number().int().optional().default(0)
+  ),
+  category_ids: z.preprocess(
+    (val) => (Array.isArray(val) ? val : []),
+    z.array(z.string()).optional().default([])
+  ),
+  tag_ids: z.preprocess(
+    (val) => (Array.isArray(val) ? val : []),
+    z.array(z.string()).optional().default([])
+  ),
 });
 
 export const categorySchema = z.object({
