@@ -47,10 +47,19 @@ export function SettingsManager({ profile }: SettingsManagerProps) {
         }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
       if (!res.ok) {
-        setUsernameError(data.error || 'Failed to update username.');
+        setUsernameError(data.error || data.message || 'Failed to update username.');
       } else {
+        if (data.username) {
+          setUsername(data.username);
+        }
         setUsernameSuccess('Username updated successfully!');
       }
     } catch {
@@ -73,8 +82,8 @@ export function SettingsManager({ profile }: SettingsManagerProps) {
     }
 
     // Client-side quick check
-    if (newPassword.length < 12) {
-      setPasswordError('Password must be at least 12 characters.');
+    if (newPassword.length < 6) {
+      setPasswordError('Password must be at least 6 characters.');
       return;
     }
 
@@ -93,9 +102,15 @@ export function SettingsManager({ profile }: SettingsManagerProps) {
         }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
       if (!res.ok) {
-        setPasswordError(data.error || 'Failed to change password.');
+        setPasswordError(data.error || data.message || 'Failed to change password.');
       } else {
         setPasswordSuccess('Password changed successfully! Default password flag has been cleared.');
         setCurrentPassword('');
@@ -184,7 +199,7 @@ export function SettingsManager({ profile }: SettingsManagerProps) {
               required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Min 12 chars (upper, lower, digit, symbol)"
+              placeholder="Enter new password (min. 6 characters)"
               className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white font-mono"
             />
           </div>
