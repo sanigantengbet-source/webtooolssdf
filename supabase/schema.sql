@@ -271,6 +271,7 @@ create policy "Admins can manage tags delete"
 on public.tags for delete
 using (public.is_admin());
 
+-- 7.6 Tool Tags Policies
 drop policy if exists "Tool tags viewable by everyone" on public.tool_tags;
 create policy "Tool tags viewable by everyone"
 on public.tool_tags for select
@@ -286,13 +287,13 @@ create policy "Admins can manage tool tags delete"
 on public.tool_tags for delete
 using (public.is_admin());
 
--- 7.6 Audit Logs Policies (Admins only)
+-- 7.7 Audit Logs Policies (Admins only)
 drop policy if exists "Audit logs viewable only by admins" on public.audit_logs;
 create policy "Audit logs viewable only by admins"
 on public.audit_logs for select
 using (public.is_admin());
 
--- 7.7 Admin Settings Policies
+-- 7.8 Admin Settings Policies
 drop policy if exists "Admin settings viewable only by admins" on public.admin_settings;
 create policy "Admin settings viewable only by admins"
 on public.admin_settings for select
