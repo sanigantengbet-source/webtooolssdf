@@ -1,0 +1,6 @@
+{
+  "name": "Tool Collection",
+  "description": "A curated collection of tools, websites, and projects with Supabase real-time synchronization and developer-grade administrative management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
