@@ -94,33 +94,41 @@ function ToolFormContent({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) {
-      setError('Tool name is required.');
-      return;
-    }
-    if (!slug.trim()) {
-      setError('Slug is required.');
-      return;
-    }
-    if (!description.trim()) {
-      setError('Description is required.');
-      return;
-    }
 
     setIsSaving(true);
     setError(null);
 
+    const trimmedName = name.trim();
+    const finalName = trimmedName || 'Untitled Tool';
+    const finalSlug =
+      slug.trim().toLowerCase() ||
+      finalName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)+/g, '') ||
+      `tool-${Date.now()}`;
+
     const payload = {
-      name: name.trim(),
-      slug: slug.trim().toLowerCase(),
-      shortDescription: shortDescription.trim() || undefined,
+      name: finalName,
+      slug: finalSlug,
+      short_description: shortDescription.trim(),
       description: description.trim(),
-      logoUrl: logoUrl.trim() || undefined,
-      thumbnailUrl: thumbnailUrl.trim() || undefined,
-      websiteUrl: websiteUrl.trim() || undefined,
-      githubUrl: githubUrl.trim() || undefined,
-      documentationUrl: documentationUrl.trim() || undefined,
+      logo_url: logoUrl.trim(),
+      thumbnail_url: thumbnailUrl.trim(),
+      website_url: websiteUrl.trim(),
+      github_url: githubUrl.trim(),
+      documentation_url: documentationUrl.trim(),
       status,
+      is_featured: isFeatured,
+      category_ids: selectedCategoryIds,
+      tag_ids: selectedTagIds,
+      // Compatibility aliases
+      shortDescription: shortDescription.trim(),
+      logoUrl: logoUrl.trim(),
+      thumbnailUrl: thumbnailUrl.trim(),
+      websiteUrl: websiteUrl.trim(),
+      githubUrl: githubUrl.trim(),
+      documentationUrl: documentationUrl.trim(),
       isFeatured,
       categoryIds: selectedCategoryIds,
       tagIds: selectedTagIds,
@@ -138,9 +146,15 @@ function ToolFormContent({
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
       if (!res.ok) {
-        setError(data.error || 'Failed to save tool.');
+        setError(data.error || data.message || 'Failed to save tool.');
         setIsSaving(false);
         return;
       }
@@ -181,29 +195,23 @@ function ToolFormContent({
         {/* Name & Slug */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium mb-1">
-              Name <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-xs font-medium mb-1">Name</label>
             <input
               type="text"
-              required
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
-              placeholder="Next.js"
+              placeholder="e.g. Next.js (optional)"
               className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium mb-1">
-              Slug <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-xs font-medium mb-1">Slug</label>
             <input
               type="text"
-              required
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              placeholder="nextjs"
+              placeholder="e.g. nextjs (auto-generated if empty)"
               className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white font-mono"
             />
           </div>
@@ -216,22 +224,19 @@ function ToolFormContent({
             type="text"
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
-            placeholder="The React framework for the web."
+            placeholder="The React framework for the web (optional)"
             className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
           />
         </div>
 
         {/* Full Description */}
         <div>
-          <label className="block text-xs font-medium mb-1">
-            Full Description <span className="text-red-500">*</span>
-          </label>
+          <label className="block text-xs font-medium mb-1">Full Description</label>
           <textarea
             rows={4}
-            required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Detailed description of the tool, features, and capabilities..."
+            placeholder="Detailed description of the tool, features, and capabilities (optional)..."
             className="w-full px-3 py-2 text-xs rounded border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
           />
         </div>
