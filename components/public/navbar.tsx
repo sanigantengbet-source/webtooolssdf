@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Wrench, Search, Shield, Menu, X, Github, MessageCircle, Coffee } from 'lucide-react';
+import Image from 'next/image';
+import { Search, Shield, Menu, X, Github, MessageCircle, Coffee } from 'lucide-react';
 
 interface NavbarProps {
   onSearchClick?: () => void;
@@ -13,17 +14,22 @@ export function Navbar({ onSearchClick }: NavbarProps) {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#eaeaea] dark:border-[#27272a] bg-white/80 dark:bg-black/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
         {/* Brand Logo & Name */}
         <div className="flex items-center gap-6">
           <Link
             href="/"
-            className="flex items-center gap-2.5 font-semibold text-sm sm:text-base text-[#171717] dark:text-[#ededed] tracking-tight hover:opacity-85 transition-opacity"
+            className="flex items-center hover:opacity-85 transition-opacity"
+            aria-label="Tool Collection"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded bg-[#171717] text-white dark:bg-[#ededed] dark:text-black">
-              <Wrench className="h-4 w-4" />
-            </div>
-            <span>Tool Collection</span>
+            <Image
+              src="/logo.png"
+              alt="Tool Collection"
+              width={547}
+              height={169}
+              priority
+              className="h-9 sm:h-10 md:h-11 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -176,7 +182,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
             className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-zinc-600 dark:hover:text-zinc-300"
           >
             <Coffee className="h-4 w-4" />
-            <span>buy me a coffee</span>
+            <span>buy me a coffe</span>
           </a>
           <div className="pt-2 border-t border-[#eaeaea] dark:border-[#27272a]">
             <Link
