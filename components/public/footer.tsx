@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="border-t border-[#eaeaea] dark:border-[#27272a] py-6 text-xs text-[#666666] dark:text-[#a1a1a1] bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         <div className="flex flex-col sm:flex-row items-center gap-1.5 sm:gap-3">
-          <p>© {new Date().getFullYear()} Tool Collection.</p>
+          <p>© {new Date().getFullYear()} Tools Collection.</p>
           <span className="hidden sm:inline text-zinc-400 dark:text-zinc-600">•</span>
           <p className="font-semibold tracking-wider text-[#171717] dark:text-[#ededed] uppercase">
             POWERED BY SANN404 FORUM GROUP
@@ -41,7 +41,7 @@ export function Footer() {
             className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
           >
             <Coffee className="h-3.5 w-3.5" />
-            <span>buy me a coffe</span>
+            <span>buy me a coffee</span>
           </a>
         </div>
       </div>
