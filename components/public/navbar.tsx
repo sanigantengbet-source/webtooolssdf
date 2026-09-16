@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Wrench, Search, Shield, Menu, X, Github, MessageCircle, Coffee } from 'lucide-react';
-import { ThemeToggle } from '../ui/theme-toggle';
 
 interface NavbarProps {
   onSearchClick?: () => void;
@@ -110,8 +109,6 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           >
             <Github className="h-4 w-4" />
           </a>
-
-          <ThemeToggle />
 
           <Link
             href="/admin"
