@@ -1,214 +1,80 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Search, Shield, Menu, X, Github, MessageCircle, Coffee } from 'lucide-react';
+import type { Metadata } from 'next';
+import { ArrowLeft } from 'lucide-react';
+import { Navbar } from '@/components/public/navbar';
+import { Footer } from '@/components/public/footer';
 
-interface NavbarProps {
-  onSearchClick?: () => void;
-}
+export const metadata: Metadata = {
+  title: 'Team Credits - SANN404 FORUM GROUP | Tool Collection',
+  description:
+    'Thank you to all the admins, developers, and contributors of SANN404 FORUM GROUP who have been part of the development and management of the projects featured in this collection.',
+  openGraph: {
+    title: 'Team Credits - SANN404 FORUM GROUP',
+    description:
+      'Acknowledgment and appreciation for everyone behind SANN404 FORUM GROUP.',
+    type: 'website',
+  },
+};
 
-export function Navbar({ onSearchClick }: NavbarProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+export default function CreditsPage() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[#eaeaea] dark:border-[#27272a] bg-white/80 dark:bg-black/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
-        {/* Brand Logo & Name */}
-        <div className="flex items-center gap-6">
-          <Link
-            href="/"
-            className="flex items-center hover:opacity-85 transition-opacity"
-            aria-label="Tool Collection"
-          >
-            <Image
-              src="/logo.png"
-              alt="Tool Collection"
-              width={547}
-              height={169}
-              priority
-              className="h-9 sm:h-10 md:h-11 w-auto object-contain"
-            />
-          </Link>
+    <div id="credits-page" className="min-h-screen flex flex-col bg-white dark:bg-black text-[#171717] dark:text-[#ededed]">
+      <Navbar />
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-4 text-xs text-[#666666] dark:text-[#a1a1a1]">
-            <Link
-              href="/"
-              className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
-            >
-              Tools
-            </Link>
-            <Link
-              href="/#categories"
-              className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
-            >
-              Categories
-            </Link>
-            <Link
-              href="/credits"
-              className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
-            >
-              Team Credits
-            </Link>
-            <a
-              href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
-            >
-              <MessageCircle className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Saluran</span>
-            </a>
-            <a
-              href="https://github.com/sannnproject"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
-            >
-              <Github className="h-3.5 w-3.5" />
-              <span>GitHub</span>
-            </a>
-            <a
-              href="https://saweria.co/sannnforums"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
-            >
-              <Coffee className="h-3.5 w-3.5" />
-              <span>give me coffe</span>
-            </a>
-          </nav>
-        </div>
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-16">
+        {/* Back Link */}
+        <Link
+          href="/"
+          id="credits-back-link"
+          className="inline-flex items-center gap-2 text-xs font-medium text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed] mb-10 transition-colors group"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+          <span>Back to Tools Collection</span>
+        </Link>
 
-        {/* Right side: Search, Quick Socials, Theme Toggle, Admin link */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          {onSearchClick && (
-            <button
-              onClick={onSearchClick}
-              type="button"
-              className="hidden sm:flex items-center gap-2 px-2.5 py-1 text-xs text-[#666666] dark:text-[#a1a1a1] bg-[#fafafa] dark:bg-[#141414] border border-[#eaeaea] dark:border-[#27272a] rounded-md hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
-              title="Quick Search"
-            >
-              <Search className="h-3.5 w-3.5" />
-              <span className="font-mono text-[11px]">Search tools...</span>
-              <kbd className="text-[10px] font-mono bg-white dark:bg-[#202020] px-1 py-0.5 rounded border border-[#eaeaea] dark:border-[#27272a]">
-                /
-              </kbd>
-            </button>
-          )}
+        {/* Header Title */}
+        <div className="space-y-6">
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#171717] dark:text-white leading-tight sm:leading-snug">
+            Thanks to Everyone Behind SANN404 FORUM GROUP
+          </h1>
 
-          {/* Social quick action buttons (desktop) */}
-          <a
-            href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="WhatsApp Channel"
-            aria-label="WhatsApp Channel"
-            className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-md border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#eaeaea] dark:hover:bg-[#1a1a1a] transition-colors"
-          >
-            <MessageCircle className="h-4 w-4 text-emerald-500" />
-          </a>
+          <div className="space-y-5 text-base sm:text-lg leading-relaxed text-[#444444] dark:text-[#a1a1a1]">
+            <p>
+              Thank you to all the admins, developers, and contributors of{' '}
+              <span className="font-semibold text-[#171717] dark:text-white">
+                SANN404 FORUM GROUP
+              </span>{' '}
+              who have been part of the development and management of the various
+              projects featured in this collection.
+            </p>
 
-          <a
-            href="https://github.com/sannnproject"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="GitHub Profile"
-            aria-label="GitHub Profile"
-            className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-md border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#eaeaea] dark:hover:bg-[#1a1a1a] transition-colors"
-          >
-            <Github className="h-4 w-4" />
-          </a>
+            <p>
+              Every website, tool, and project comes with its own process, ideas,
+              time, and contributions from the people behind it. From developing
+              features, fixing bugs, maintenance, testing, and design to the many
+              small efforts that may not always be visible to users.
+            </p>
 
-          <Link
-            href="/admin"
-            id="admin-nav-link"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#eaeaea] dark:hover:bg-[#1a1a1a] transition-colors"
-          >
-            <Shield className="h-3.5 w-3.5 text-zinc-500" />
-            <span>Admin</span>
-          </Link>
+            <p>
+              This collection is not only about completed projects, but also about
+              the teamwork and contributions of everyone who continues to help{' '}
+              <span className="font-semibold text-[#171717] dark:text-white">
+                SANN404 FORUM GROUP
+              </span>{' '}
+              grow. Every contribution matters and becomes a meaningful part of our
+              journey together.
+            </p>
 
-          {/* Mobile hamburger button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            type="button"
-            className="md:hidden flex h-8 w-8 items-center justify-center rounded-md border border-[#eaeaea] dark:border-[#27272a] text-[#171717] dark:text-[#ededed]"
-            aria-label="Toggle mobile menu"
-          >
-            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile dropdown drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#0a0a0a] px-4 py-3 space-y-1.5">
-          <Link
-            href="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
-          >
-            Tools
-          </Link>
-          <Link
-            href="/#categories"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
-          >
-            Categories
-          </Link>
-          <Link
-            href="/credits"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white font-medium"
-          >
-            Team Credits
-          </Link>
-          <a
-            href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-emerald-600 dark:hover:text-emerald-400"
-          >
-            <MessageCircle className="h-4 w-4 text-emerald-500" />
-            <span>Saluran WhatsApp</span>
-          </a>
-          <a
-            href="https://github.com/sannnproject"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-zinc-600 dark:hover:text-zinc-300"
-          >
-            <Github className="h-4 w-4" />
-            <span>GitHub</span>
-          </a>
-          <a
-            href="https://saweria.co/sannnforums"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-zinc-600 dark:hover:text-zinc-300"
-          >
-            <Coffee className="h-4 w-4" />
-            <span>give me coffe</span>
-          </a>
-          <div className="pt-2 border-t border-[#eaeaea] dark:border-[#27272a]">
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 py-2 text-sm font-medium text-[#171717] dark:text-[#ededed]"
-            >
-              <Shield className="h-4 w-4 text-zinc-500" />
-              <span>Admin Dashboard</span>
-            </Link>
+            <p className="font-medium text-[#171717] dark:text-white pt-2">
+              Thank you to everyone who has contributed, helped, and continued to
+              support SANN404 FORUM GROUP.
+            </p>
           </div>
         </div>
-      )}
-    </header>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
