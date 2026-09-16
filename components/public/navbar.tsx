@@ -46,6 +46,12 @@ export function Navbar({ onSearchClick }: NavbarProps) {
             >
               Categories
             </Link>
+            <Link
+              href="/credits"
+              className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
+            >
+              Team Credits
+            </Link>
             <a
               href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
               target="_blank"
@@ -71,7 +77,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
               className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               <Coffee className="h-3.5 w-3.5" />
-              <span>give me coffee</span>
+              <span>give me coffe</span>
             </a>
           </nav>
         </div>
@@ -153,6 +159,13 @@ export function Navbar({ onSearchClick }: NavbarProps) {
             className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
           >
             Categories
+          </Link>
+          <Link
+            href="/credits"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white font-medium"
+          >
+            Team Credits
           </Link>
           <a
             href="https://whatsapp.com/channel/0029Vb6ukqnHQbS4mKP0j80L"
