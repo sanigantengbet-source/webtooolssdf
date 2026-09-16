@@ -17,7 +17,6 @@ import {
   User,
   AlertTriangle,
 } from 'lucide-react';
-import { ThemeToggle } from '../ui/theme-toggle';
 
 interface AdminLayoutClientProps {
   children: React.ReactNode;
@@ -68,7 +67,6 @@ export function AdminLayoutClient({
         </div>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <button
             onClick={() => setMobileDrawerOpen(true)}
             className="p-1.5 rounded-md border border-[#eaeaea] dark:border-[#27272a] text-[#171717] dark:text-[#ededed]"
@@ -89,7 +87,6 @@ export function AdminLayoutClient({
             </div>
             <span>Tool Collection</span>
           </Link>
-          <ThemeToggle />
         </div>
 
         {/* Sidebar Navigation */}
