@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ShieldCheck, Database, CheckCircle2, AlertTriangle, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export default function AdminSetupPage() {
   const router = useRouter();
@@ -88,7 +87,6 @@ export default function AdminSetupPage() {
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Public Site
         </Link>
-        <ThemeToggle />
       </div>
 
       {/* Main Container */}
