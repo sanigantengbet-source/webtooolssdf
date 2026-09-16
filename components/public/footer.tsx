@@ -41,7 +41,7 @@ export function Footer() {
             className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
           >
             <Coffee className="h-3.5 w-3.5" />
-            <span>buy me a coffee</span>
+            <span>buy me a coffe</span>
           </a>
         </div>
       </div>
