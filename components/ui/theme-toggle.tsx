@@ -1,23 +1,21 @@
 'use client';
 
 import React, { useSyncExternalStore } from 'react';
-import { Sun, Moon, Laptop } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { useTheme } from './theme-provider';
 
 const emptySubscribe = () => () => {};
 
 export function ThemeToggle({ className = '' }: { className?: string }) {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const isMounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
     () => false
   );
 
-  const cycleTheme = () => {
-    if (theme === 'system') setTheme('light');
-    else if (theme === 'light') setTheme('dark');
-    else setTheme('system');
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   if (!isMounted) {
@@ -33,18 +31,22 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
     );
   }
 
+  const isDark = resolvedTheme === 'dark';
+
   return (
     <button
       id="theme-toggle-btn"
-      onClick={cycleTheme}
+      onClick={toggleTheme}
       type="button"
-      aria-label={`Current theme: ${theme}. Click to switch theme`}
+      aria-label={`Current mode: ${resolvedTheme}. Click to switch to ${isDark ? 'light' : 'dark'} mode`}
       className={`inline-flex items-center justify-center h-8 w-8 rounded-md border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] transition-colors focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white ${className}`}
-      title={`Theme: ${theme}`}
+      title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
-      {theme === 'light' && <Sun className="h-4 w-4" />}
-      {theme === 'dark' && <Moon className="h-4 w-4" />}
-      {theme === 'system' && <Laptop className="h-4 w-4" />}
+      {isDark ? (
+        <Sun className="h-4 w-4 text-amber-400" />
+      ) : (
+        <Moon className="h-4 w-4 text-zinc-700" />
+      )}
     </button>
   );
 }
