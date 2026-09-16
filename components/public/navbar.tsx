@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Wrench, Search, Shield, Menu, X, Github, MessageCircle } from 'lucide-react';
+import { Wrench, Search, Shield, Menu, X, Github, MessageCircle, Coffee } from 'lucide-react';
 import { ThemeToggle } from '../ui/theme-toggle';
 
 interface NavbarProps {
@@ -28,7 +28,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-5 text-xs text-[#666666] dark:text-[#a1a1a1]">
+          <nav className="hidden md:flex items-center gap-4 text-xs text-[#666666] dark:text-[#a1a1a1]">
             <Link
               href="/"
               className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
@@ -58,6 +58,15 @@ export function Navbar({ onSearchClick }: NavbarProps) {
             >
               <Github className="h-3.5 w-3.5" />
               <span>GitHub</span>
+            </a>
+            <a
+              href="https://saweria.co/sannnforums"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
+            >
+              <Coffee className="h-3.5 w-3.5" />
+              <span>give me coffe</span>
             </a>
           </nav>
         </div>
@@ -161,6 +170,16 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           >
             <Github className="h-4 w-4" />
             <span>GitHub</span>
+          </a>
+          <a
+            href="https://saweria.co/sannnforums"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-zinc-600 dark:hover:text-zinc-300"
+          >
+            <Coffee className="h-4 w-4" />
+            <span>give me coffe</span>
           </a>
           <div className="pt-2 border-t border-[#eaeaea] dark:border-[#27272a]">
             <Link
