@@ -4,7 +4,6 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Shield, Lock, User, AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 function LoginForm() {
   const router = useRouter();
@@ -225,7 +224,6 @@ export default function AdminLoginPage() {
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Public Site
         </Link>
-        <ThemeToggle />
       </div>
 
       {/* Main Login Card with Suspense */}
