@@ -8,7 +8,7 @@ export function Hero() {
           Tools Collection
         </h1>
         <p className="mt-1.5 text-sm sm:text-base text-[#666666] dark:text-[#a1a1a1] max-w-2xl leading-relaxed">
-          A curated collection of tools, websites and projects.
+           A curated collection of web tools, websites and projects created and maintained by SANN404 FORUM GROUP
         </p>
       </div>
     </section>
