@@ -20,6 +20,26 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var d = document.documentElement;
+                var t = localStorage.getItem('tool-collection-theme');
+                var isDark = t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches) || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                if (isDark) {
+                  d.classList.add('dark');
+                  d.style.colorScheme = 'dark';
+                } else {
+                  d.classList.remove('dark');
+                  d.style.colorScheme = 'light';
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased bg-white dark:bg-black text-[#171717] dark:text-[#ededed] min-h-screen">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
