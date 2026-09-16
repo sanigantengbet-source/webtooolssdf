@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, MessageCircle } from 'lucide-react';
+import { Github, MessageCircle, Coffee } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -32,6 +32,16 @@ export function Footer() {
           >
             <Github className="h-3.5 w-3.5" />
             <span>GitHub</span>
+          </a>
+
+          <a
+            href="https://saweria.co/sannnforums"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
+          >
+            <Coffee className="h-3.5 w-3.5" />
+            <span>give me coffe</span>
           </a>
         </div>
       </div>
