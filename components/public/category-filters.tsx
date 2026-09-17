@@ -22,9 +22,9 @@ export function CategoryFilters({
         <button
           id="cat-filter-all"
           onClick={() => onSelect('all')}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+          className={`px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all duration-75 active:scale-95 ${
             selectedSlug === 'all'
-              ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black'
+              ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black shadow-xs'
               : 'bg-[#fafafa] dark:bg-[#181818] text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed] border border-[#eaeaea] dark:border-[#27272a]'
           }`}
         >
@@ -41,9 +41,9 @@ export function CategoryFilters({
               key={cat.id}
               id={`cat-filter-${cat.slug}`}
               onClick={() => onSelect(cat.slug)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all duration-75 active:scale-95 ${
                 isSelected
-                  ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black'
+                  ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black shadow-xs'
                   : 'bg-[#fafafa] dark:bg-[#181818] text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed] border border-[#eaeaea] dark:border-[#27272a]'
               }`}
             >
