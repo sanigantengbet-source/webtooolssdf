@@ -137,7 +137,7 @@ export function HeroSection() {
               className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5 cursor-pointer"
             >
               <Link href="/credits" className="flex items-center justify-center">
-                <Sparkles className="w-4 h-4 mr-2 text-amber-500" />
+                <Sparkles className="w-4 h-4 mr-2 text-white" />
                 <span>Meet the Team</span>
               </Link>
             </Button>
