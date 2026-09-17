@@ -102,9 +102,10 @@ export function AdminLayoutClient({
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
+                prefetch={true}
+                className={`flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium transition-all duration-75 active:scale-[0.98] ${
                   isActive
-                    ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black'
+                    ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black shadow-xs'
                     : 'text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed] hover:bg-[#fafafa] dark:hover:bg-[#181818]'
                 }`}
               >
@@ -178,8 +179,9 @@ export function AdminLayoutClient({
                   <Link
                     key={item.name}
                     href={item.href}
+                    prefetch={true}
                     onClick={() => setMobileDrawerOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-75 active:scale-[0.98] ${
                       isActive
                         ? 'bg-[#171717] text-white dark:bg-[#ededed] dark:text-black'
                         : 'text-[#666666] dark:text-[#a1a1a1]'
