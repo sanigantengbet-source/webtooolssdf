@@ -35,13 +35,13 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-4 text-xs text-[#666666] dark:text-[#a1a1a1]">
             <Link
-              href="/"
+              href="/tools"
               className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               Tools
             </Link>
             <Link
-              href="/#categories"
+              href="/tools#categories"
               className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               Categories
@@ -77,7 +77,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
               className="inline-flex items-center gap-1.5 hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               <Coffee className="h-3.5 w-3.5" />
-              <span>buy me a coffee</span>
+              <span>give me coffe</span>
             </a>
           </nav>
         </div>
@@ -147,14 +147,14 @@ export function Navbar({ onSearchClick }: NavbarProps) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#0a0a0a] px-4 py-3 space-y-1.5">
           <Link
-            href="/"
+            href="/tools"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
           >
             Tools
           </Link>
           <Link
-            href="/#categories"
+            href="/tools#categories"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
           >
@@ -195,7 +195,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
             className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-zinc-600 dark:hover:text-zinc-300"
           >
             <Coffee className="h-4 w-4" />
-            <span>buy me a coffee</span>
+            <span>give me coffe</span>
           </a>
           <div className="pt-2 border-t border-[#eaeaea] dark:border-[#27272a]">
             <Link
