@@ -125,7 +125,7 @@ export function HeroSection() {
               size="lg"
               className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group cursor-pointer"
             >
-              <Link href="/tools" className="flex items-center justify-center">
+              <Link href="/tools" prefetch={true} className="flex items-center justify-center">
                 <span>Explore All Tools</span>
                 <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
               </Link>
@@ -136,7 +136,7 @@ export function HeroSection() {
               variant="outline"
               className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5 cursor-pointer"
             >
-              <Link href="/credits" className="flex items-center justify-center">
+              <Link href="/credits" prefetch={true} className="flex items-center justify-center">
                 <Sparkles className="w-4 h-4 mr-2 text-white" />
                 <span>Meet the Team</span>
               </Link>
