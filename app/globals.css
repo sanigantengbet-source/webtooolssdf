@@ -139,3 +139,27 @@
     z-index: 1;
   }
 }
+
+/* Fast touch and instant interaction response */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  touch-action: manipulation;
+}
+
+button,
+a,
+[role="button"],
+input[type="button"],
+input[type="submit"] {
+  touch-action: manipulation;
+}
+
+button:active:not(:disabled),
+a:active:not(:has(button)),
+[role="button"]:active {
+  transform: scale(0.98);
+  transition: transform 0.05s ease-out;
+}
