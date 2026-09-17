@@ -1,6 +1,8 @@
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ui/theme-provider';
+import { RouteProgress } from '@/components/ui/route-progress';
 
 export const metadata: Metadata = {
   title: 'Tool Collection - Curated Tools & Projects',
@@ -21,7 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <body className="antialiased bg-black text-[#ededed] min-h-screen">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <Suspense fallback={null}>
+            <RouteProgress />
+          </Suspense>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
