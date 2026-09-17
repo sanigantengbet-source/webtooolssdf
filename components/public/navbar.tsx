@@ -36,18 +36,21 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           <nav className="hidden md:flex items-center gap-4 text-xs text-[#666666] dark:text-[#a1a1a1]">
             <Link
               href="/tools"
+              prefetch={true}
               className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               Tools
             </Link>
             <Link
               href="/tools#categories"
+              prefetch={true}
               className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               Categories
             </Link>
             <Link
               href="/credits"
+              prefetch={true}
               className="hover:text-[#171717] dark:hover:text-[#ededed] transition-colors"
             >
               Team Credits
@@ -125,7 +128,8 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           <Link
             href="/admin"
             id="admin-nav-link"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#eaeaea] dark:hover:bg-[#1a1a1a] transition-colors"
+            prefetch={true}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#eaeaea] dark:hover:bg-[#1a1a1a] transition-all duration-75 active:scale-[0.98]"
           >
             <Shield className="h-3.5 w-3.5 text-zinc-500" />
             <span>Admin</span>
@@ -135,7 +139,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             type="button"
-            className="md:hidden flex h-8 w-8 items-center justify-center rounded-md border border-[#eaeaea] dark:border-[#27272a] text-[#171717] dark:text-[#ededed]"
+            className="md:hidden flex h-8 w-8 items-center justify-center rounded-md border border-[#eaeaea] dark:border-[#27272a] text-[#171717] dark:text-[#ededed] active:scale-95 transition-transform"
             aria-label="Toggle mobile menu"
           >
             {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -148,22 +152,25 @@ export function Navbar({ onSearchClick }: NavbarProps) {
         <div className="md:hidden border-t border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#0a0a0a] px-4 py-3 space-y-1.5">
           <Link
             href="/tools"
+            prefetch={true}
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
+            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white active:scale-[0.98]"
           >
             Tools
           </Link>
           <Link
             href="/tools#categories"
+            prefetch={true}
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white"
+            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white active:scale-[0.98]"
           >
             Categories
           </Link>
           <Link
             href="/credits"
+            prefetch={true}
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white font-medium"
+            className="block py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-black dark:hover:text-white font-medium active:scale-[0.98]"
           >
             Team Credits
           </Link>
