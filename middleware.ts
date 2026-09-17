@@ -22,6 +22,13 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/admin') &&
     !pathname.startsWith('/admin/login') &&
     !pathname.startsWith('/admin/setup');
+  const isAdminLoginRoute = pathname === '/admin/login';
+
+  // Public routes (/, /tools, /credits, public APIs) do not require blocking auth verification.
+  // Returning immediately gives instant sub-second response on all public clicks.
+  if (!isProtectedAdminRoute && !isAdminLoginRoute) {
+    return response;
+  }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -58,10 +65,18 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  // Refresh user session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Refresh user session with safety timeout to prevent hanging on network delays
+  let user = null;
+  try {
+    const authPromise = supabase.auth.getUser();
+    const timeoutPromise = new Promise<{ data: { user: null }; error: Error }>((resolve) =>
+      setTimeout(() => resolve({ data: { user: null }, error: new Error('Auth timeout') }), 2500)
+    );
+    const authResult = await Promise.race([authPromise, timeoutPromise]);
+    user = authResult.data?.user || null;
+  } catch {
+    user = null;
+  }
 
   if (isProtectedAdminRoute) {
     if (!user) {
@@ -84,7 +99,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // If logged in admin visits /admin/login, redirect to /admin dashboard
-  if (pathname === '/admin/login' && user) {
+  if (isAdminLoginRoute && user) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
