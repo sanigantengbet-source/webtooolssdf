@@ -79,7 +79,7 @@ export function PublicToolsView({
 
     debounceTimerRef.current = setTimeout(() => {
       fetchTools(query, selectedCategory, statusFilter);
-    }, 300);
+    }, 120);
   };
 
   const handleCategorySelect = (slug: string) => {
@@ -210,8 +210,8 @@ export function PublicToolsView({
         />
       </div>
 
-      {/* Loading Skeleton */}
-      {isLoading ? (
+      {/* Tools Grid or Loading Skeleton */}
+      {isLoading && tools.length === 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
@@ -222,7 +222,7 @@ export function PublicToolsView({
         </div>
       ) : tools.length > 0 ? (
         /* Responsive Grid: Desktop 3-4 col, Tablet 2 col, Mobile 1 col */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 transition-opacity duration-150 ${isLoading ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}>
           {tools.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />
           ))}
