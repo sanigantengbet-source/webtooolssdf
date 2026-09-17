@@ -107,23 +107,40 @@ export function FooterSection() {
                   {title}
                 </h3>
                 <ul className="space-y-4">
-                  {links.map((link) => (
-                    <li key={link.name}>
-                      <a
-                        href={link.href}
-                        target={link.external ? "_blank" : undefined}
-                        rel={link.external ? "noopener noreferrer" : undefined}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
-                      >
+                  {links.map((link) => {
+                    const isInternal = link.href.startsWith('/') && !link.external;
+                    const content = (
+                      <>
                         {link.name}
-                        {"badge" in link && link.badge && (
+                        {'badge' in link && link.badge && (
                           <span className="text-[10px] px-2 py-0.5 bg-foreground text-background rounded-full font-mono">
                             {link.badge}
                           </span>
                         )}
-                      </a>
-                    </li>
-                  ))}
+                      </>
+                    );
+                    const className =
+                      'text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2';
+
+                    return (
+                      <li key={link.name}>
+                        {isInternal ? (
+                          <Link href={link.href} prefetch={true} className={className}>
+                            {content}
+                          </Link>
+                        ) : (
+                          <a
+                            href={link.href}
+                            target={link.external ? '_blank' : undefined}
+                            rel={link.external ? 'noopener noreferrer' : undefined}
+                            className={className}
+                          >
+                            {content}
+                          </a>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
