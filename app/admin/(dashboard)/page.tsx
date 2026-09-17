@@ -152,14 +152,16 @@ export default async function AdminDashboardPage() {
         <div className="flex items-center gap-2.5">
           <Link
             href="/admin/tools?action=new"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium bg-[#171717] text-white dark:bg-[#ededed] dark:text-black hover:opacity-90 transition-opacity"
+            prefetch={true}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium bg-[#171717] text-white dark:bg-[#ededed] dark:text-black hover:opacity-90 transition-opacity active:scale-95"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Tool</span>
           </Link>
           <Link
             href="/admin/categories"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#fafafa] dark:hover:bg-[#181818] transition-colors"
+            prefetch={true}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#111111] text-[#171717] dark:text-[#ededed] hover:bg-[#fafafa] dark:hover:bg-[#181818] transition-colors active:scale-95"
           >
             <Layers className="h-3.5 w-3.5 text-zinc-500" />
             <span>Categories</span>
@@ -175,7 +177,8 @@ export default async function AdminDashboardPage() {
             <Link
               key={card.title}
               href={card.href}
-              className="group p-4 rounded-lg border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#111111] hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
+              prefetch={true}
+              className="group p-4 rounded-lg border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#111111] hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors active:scale-[0.98]"
             >
               <div className="flex items-center justify-between text-[#666666] dark:text-[#a1a1a1] mb-2">
                 <span className="text-xs font-medium">{card.title}</span>
@@ -203,7 +206,8 @@ export default async function AdminDashboardPage() {
           </div>
           <Link
             href="/admin/audit"
-            className="inline-flex items-center gap-1 text-xs font-medium text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed]"
+            prefetch={true}
+            className="inline-flex items-center gap-1 text-xs font-medium text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed] active:scale-95"
           >
             View all
             <ArrowRight className="h-3 w-3" />
