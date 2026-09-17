@@ -60,23 +60,37 @@ export function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 lg:gap-10">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm text-foreground/70 hover:text-foreground transition-colors duration-300 relative group font-medium"
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isInternal = link.href.startsWith("/");
+              return isInternal ? (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  prefetch={true}
+                  className="text-sm text-foreground/70 hover:text-foreground transition-colors duration-200 relative group font-medium"
+                >
+                  {link.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-200 group-hover:w-full" />
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-sm text-foreground/70 hover:text-foreground transition-colors duration-200 relative group font-medium"
+                >
+                  {link.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-200 group-hover:w-full" />
+                </a>
+              );
+            })}
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
             <Link
               href="/admin/login"
-              className={`text-foreground/70 hover:text-foreground transition-all duration-500 font-medium ${
+              prefetch={true}
+              className={`text-foreground/70 hover:text-foreground transition-all duration-300 font-medium ${
                 isScrolled ? "text-xs" : "text-sm"
               }`}
             >
@@ -85,11 +99,11 @@ export function Navigation() {
             <Button
               asChild
               size="sm"
-              className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-500 cursor-pointer ${
+              className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-300 cursor-pointer ${
                 isScrolled ? "px-4 h-8 text-xs" : "px-6 h-9"
               }`}
             >
-              <Link href="/tools" className="flex items-center gap-1.5">
+              <Link href="/tools" prefetch={true} className="flex items-center gap-1.5">
                 <span>Explore Tools</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
@@ -123,23 +137,40 @@ export function Navigation() {
         <div className="flex flex-col h-full px-8 pt-28 pb-8">
           {/* Navigation Links */}
           <div className="flex-1 flex flex-col justify-center gap-6">
-            {navLinks.map((link, i) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-3xl sm:text-4xl font-display text-foreground hover:text-muted-foreground transition-all duration-500 ${
-                  isMobileMenuOpen
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
-                }`}
-                style={{
-                  transitionDelay: isMobileMenuOpen ? `${i * 60}ms` : "0ms",
-                }}
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link, i) => {
+              const isInternal = link.href.startsWith("/");
+              const linkClasses = `text-3xl sm:text-4xl font-display text-foreground hover:text-muted-foreground transition-all duration-300 ${
+                isMobileMenuOpen
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`;
+              const style = {
+                transitionDelay: isMobileMenuOpen ? `${i * 40}ms` : "0ms",
+              };
+
+              return isInternal ? (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  prefetch={true}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={linkClasses}
+                  style={style}
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={linkClasses}
+                  style={style}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
           </div>
 
           {/* Bottom CTAs */}
