@@ -71,6 +71,7 @@ export function ToolCard({ tool }: ToolCardProps) {
             <div>
               <Link
                 href={`/tools/${tool.slug}`}
+                prefetch={true}
                 className="font-medium text-base text-[#171717] dark:text-[#ededed] group-hover:underline underline-offset-4 focus:outline-none"
               >
                 {tool.name}
@@ -127,7 +128,8 @@ export function ToolCard({ tool }: ToolCardProps) {
         <div className="flex items-center gap-2">
           <Link
             href={`/tools/${tool.slug}`}
-            className="inline-flex items-center gap-1 text-xs font-medium text-[#171717] dark:text-[#ededed] hover:opacity-80 py-1"
+            prefetch={true}
+            className="inline-flex items-center gap-1 text-xs font-medium text-[#171717] dark:text-[#ededed] hover:opacity-80 py-1 transition-transform active:scale-95"
           >
             Details
             <ArrowRight className="h-3 w-3" />
