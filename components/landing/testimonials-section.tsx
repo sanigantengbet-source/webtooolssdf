@@ -145,11 +145,15 @@ export function TestimonialsSection() {
         </div>
       </div>
 
-      {/* Marquee outside container */}
-      <div className="w-full">
-        <div className="flex gap-16 items-center marquee">
+      {/* Marquee running text outside container */}
+      <div className="w-full relative overflow-hidden py-4 border-t border-b border-foreground/5 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+        <div className="flex w-max items-center marquee hover:[animation-play-state:paused] whitespace-nowrap">
           {[...Array(2)].map((_, setIdx) => (
-            <div key={setIdx} className="flex gap-16 items-center shrink-0">
+            <div
+              key={setIdx}
+              className="flex shrink-0 items-center gap-10 sm:gap-14 pr-10 sm:pr-14"
+              aria-hidden={setIdx > 0 ? "true" : undefined}
+            >
               {[
                 "SANN404 FORUMS",
                 "WEB TOOLS",
@@ -159,12 +163,12 @@ export function TestimonialsSection() {
                 "OPEN ACCESS",
                 "SYSTEM SCRIPTS",
               ].map((item) => (
-                <span
-                  key={`${setIdx}-${item}`}
-                  className="font-display text-lg sm:text-xl text-foreground/30 whitespace-nowrap hover:text-foreground transition-colors duration-300"
-                >
-                  {item}
-                </span>
+                <div key={`${setIdx}-${item}`} className="flex items-center gap-10 sm:gap-14">
+                  <span className="font-mono text-xs sm:text-sm tracking-widest uppercase font-semibold text-foreground/45 hover:text-foreground transition-colors duration-200">
+                    {item}
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-foreground/20 shrink-0" aria-hidden="true" />
+                </div>
               ))}
             </div>
           ))}
