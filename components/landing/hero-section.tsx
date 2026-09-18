@@ -145,34 +145,43 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Stats marquee */}
+      {/* Stats marquee / Running text */}
       <div
-        className={`mt-6 sm:mt-10 lg:mt-12 w-full border-t border-foreground/10 py-5 overflow-hidden transition-all duration-700 delay-500 ${
+        className={`mt-6 sm:mt-10 lg:mt-12 w-full border-t border-b border-foreground/10 py-5 overflow-hidden relative [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] transition-all duration-700 delay-500 ${
           isVisible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <div className="flex gap-16 marquee whitespace-nowrap">
+        <div className="flex w-max marquee hover:[animation-play-state:paused] whitespace-nowrap">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex gap-16 items-baseline">
+            <div
+              key={i}
+              className="flex shrink-0 items-center gap-12 sm:gap-16 pr-12 sm:pr-16"
+              aria-hidden={i > 0 ? "true" : undefined}
+            >
               {[
-                { value: "100%", label: "free & accessible", company: "COMMUNITY" },
-                { value: "Instant", label: "web-based utilities", company: "OPTIMIZED" },
-                { value: "Curated", label: "checked for safety", company: "VERIFIED" },
-                { value: "24/7", label: "always operational", company: "GLOBAL" },
-                { value: "SANN404", label: "collaborative forum", company: "ECOSYSTEM" },
+                { value: "100%", label: "Free & Accessible", company: "COMMUNITY" },
+                { value: "Instant", label: "Web-Based Utilities", company: "OPTIMIZED" },
+                { value: "Curated", label: "Checked for Safety", company: "VERIFIED" },
+                { value: "24/7", label: "Always Operational", company: "GLOBAL" },
+                { value: "SANN404", label: "Collaborative Forum", company: "ECOSYSTEM" },
               ].map((stat) => (
                 <div
                   key={`${stat.company}-${i}`}
-                  className="flex items-baseline gap-4"
+                  className="flex items-center gap-4 group"
                 >
-                  <span className="text-3xl sm:text-4xl lg:text-5xl font-display">
+                  <span className="text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-foreground">
                     {stat.value}
                   </span>
-                  <span className="text-xs sm:text-sm text-muted-foreground">
-                    {stat.label}
-                    <span className="block font-mono text-[10px] sm:text-xs mt-0.5 tracking-wider text-foreground/70">
+                  <div className="flex flex-col text-left justify-center">
+                    <span className="text-xs sm:text-sm font-medium text-foreground/80 tracking-tight">
+                      {stat.label}
+                    </span>
+                    <span className="font-mono text-[9px] sm:text-[10px] tracking-wider text-muted-foreground uppercase">
                       {stat.company}
                     </span>
+                  </div>
+                  <span className="text-foreground/20 text-xs ml-4 select-none" aria-hidden="true">
+                    ✦
                   </span>
                 </div>
               ))}
