@@ -1,6 +1,6 @@
 {
-  "name": "Tool Collection",
-  "description": "A curated collection of tools, websites, and projects with Supabase real-time synchronization and developer-grade administrative management.",
+  "name": "Tools Collection",
+  "description": "A curated collection of web tools, websites and projects created and maintained by SANN404 FORUM GROUP",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
