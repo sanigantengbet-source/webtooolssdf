@@ -5,17 +5,17 @@ import { ThemeProvider } from '@/components/ui/theme-provider';
 import { RouteProgress } from '@/components/ui/route-progress';
 
 export const metadata: Metadata = {
-  title: 'Tool Collection - Curated Tools & Projects',
-  description: 'A curated collection of tools, websites, and projects with real-time Supabase management and developer-grade administrative security.',
+  title: 'Tools Collection - Curated Tools & Projects',
+  description: 'A curated collection of web tools, websites and projects created and maintained by SANN404 FORUM GROUP',
   openGraph: {
-    title: 'Tool Collection - Curated Tools & Projects',
-    description: 'A curated collection of tools, websites, and projects with real-time Supabase management and developer-grade administrative security.',
+    title: 'Tools Collection - Curated Tools & Projects',
+    description: 'A curated collection of web tools, websites and projects created and maintained by SANN404 FORUM GROUP',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tool Collection - Curated Tools & Projects',
-    description: 'A curated collection of tools, websites, and projects.',
+    title: 'Tools Collection - Curated Tools & Projects',
+    description: 'A curated collection of web tools, websites and projects created and maintained by SANN404 FORUM GROUP',
   },
 };
 
