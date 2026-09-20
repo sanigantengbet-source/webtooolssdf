@@ -146,7 +146,8 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
         {/* Back Link */}
         <Link
-          href="/"
+          href="/tools"
+          id="back-to-all-tools"
           className="inline-flex items-center gap-1.5 text-xs text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed] mb-6 transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
