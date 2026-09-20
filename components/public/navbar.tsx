@@ -202,7 +202,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
             className="flex items-center gap-2 py-2 text-sm text-[#171717] dark:text-[#ededed] hover:text-zinc-600 dark:hover:text-zinc-300"
           >
             <Coffee className="h-4 w-4" />
-            <span>buy me a coffee</span>
+            <span>give me coffe</span>
           </a>
           <div className="pt-2 border-t border-[#eaeaea] dark:border-[#27272a]">
             <Link
