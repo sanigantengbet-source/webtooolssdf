@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Navbar } from '@/components/public/navbar';
 import { Footer } from '@/components/public/footer';
+import { ToolHeaderAction } from '@/components/public/tool-header-action';
 import { getServerSupabase } from '@/lib/supabase/server';
 import { getServiceRoleSupabase } from '@/lib/supabase/service-role';
 import type { Tool } from '@/lib/types';
@@ -154,57 +155,44 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
           Back to all tools
         </Link>
 
-        {/* Tool Header Card */}
-        <div className="rounded-lg border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#111111] p-6 mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 shrink-0 rounded-lg border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#181818] flex items-center justify-center overflow-hidden">
-                {tool.logo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={tool.logo_url}
-                    alt={`${tool.name} logo`}
-                    className="h-full w-full object-contain p-2"
-                  />
-                ) : (
-                  <span className="text-xl font-bold text-[#171717] dark:text-[#ededed]">
-                    {tool.name.slice(0, 2).toUpperCase()}
-                  </span>
-                )}
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#171717] dark:text-[#ededed]">
-                    {tool.name}
-                  </h1>
-                  <span
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium border ${statusConfig.className}`}
-                  >
-                    <span className={`h-1.5 w-1.5 rounded-full ${statusConfig.dotClass}`} />
-                    {statusConfig.label}
-                  </span>
-                </div>
-                <p className="text-sm text-[#666666] dark:text-[#a1a1a1] mt-1">
-                  {tool.short_description}
-                </p>
-              </div>
+        {/* Tool Header Card (Reference Design) */}
+        <div className="rounded-2xl border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#121214] p-5 sm:p-6 mb-8 shadow-sm">
+          <div className="flex items-center gap-4 sm:gap-5">
+            {/* Circular Avatar / Logo */}
+            <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-full border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#18181b] flex items-center justify-center overflow-hidden">
+              {tool.logo_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={tool.logo_url}
+                  alt={`${tool.name} logo`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span className="text-xl sm:text-2xl font-bold text-[#171717] dark:text-[#ededed]">
+                  {tool.name.slice(0, 2).toUpperCase()}
+                </span>
+              )}
             </div>
 
-            {/* Main Action CTA */}
-            {tool.website_url && (
-              <a
-                id="tool-primary-cta"
-                href={tool.website_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-[#171717] text-white dark:bg-[#ededed] dark:text-black hover:opacity-90 transition-opacity shrink-0"
-              >
-                <span>Open Website</span>
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            )}
+            {/* Title & Short Description */}
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#171717] dark:text-[#ededed] leading-tight">
+                {tool.name}
+              </h1>
+              {tool.short_description && (
+                <p className="text-xs sm:text-sm text-[#666666] dark:text-[#a1a1a1] mt-1 sm:mt-1.5 leading-relaxed line-clamp-3">
+                  {tool.short_description}
+                </p>
+              )}
+            </div>
           </div>
+
+          {/* Action Row: Pill "Open Website" + Circular "Bagikan" */}
+          <ToolHeaderAction
+            toolName={tool.name}
+            websiteUrl={tool.website_url}
+            shortDescription={tool.short_description}
+          />
         </div>
 
         {/* Thumbnail Preview if present */}
@@ -254,6 +242,19 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
 
           {/* Sidebar Metadata Card */}
           <div className="space-y-5 rounded-lg border border-[#eaeaea] dark:border-[#27272a] p-5 bg-[#fafafa] dark:bg-[#111111] h-fit">
+            {/* Status */}
+            <div>
+              <span className="text-xs font-medium text-[#666666] dark:text-[#a1a1a1] block mb-1.5">
+                Status
+              </span>
+              <span
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium border ${statusConfig.className}`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${statusConfig.dotClass}`} />
+                {statusConfig.label}
+              </span>
+            </div>
+
             {/* Categories */}
             {tool.categories && tool.categories.length > 0 && (
               <div>
