@@ -25,7 +25,7 @@ export default function CreditsPage() {
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-16">
         {/* Back Link */}
         <Link
-          href="/"
+          href="/tools"
           id="credits-back-link"
           className="inline-flex items-center gap-2 text-xs font-medium text-[#666666] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-[#ededed] mb-10 transition-colors group"
         >
