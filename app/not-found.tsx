@@ -14,11 +14,12 @@ export default function NotFound() {
           The tool or resource you are seeking could not be found or may have been archived.
         </p>
         <Link
-          href="/"
+          href="/tools"
+          id="not-found-back-link"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-medium bg-[#171717] text-white dark:bg-[#ededed] dark:text-black hover:opacity-90 transition-opacity"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          Back to Tool Collection
+          Back to Tools Collection
         </Link>
       </div>
     </div>
