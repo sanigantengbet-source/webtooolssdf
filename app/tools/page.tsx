@@ -8,6 +8,37 @@ import { getSupabaseEnv } from '@/lib/supabase/config';
 import { getServerSupabase } from '@/lib/supabase/server';
 import { getServiceRoleSupabase } from '@/lib/supabase/service-role';
 import type { Tool, Category } from '@/lib/types';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Tools Collection | SANN404 FORUM GROUP',
+  description:
+    'Explore the directory of web tools, websites, utilities, and projects curated and maintained by SANN404 FORUM GROUP.',
+  openGraph: {
+    title: 'Tools Collection | SANN404 FORUM GROUP',
+    description:
+      'Explore the directory of web tools, websites, utilities, and projects curated and maintained by SANN404 FORUM GROUP.',
+    url: 'https://project.saannndec5ty.my.id/tools',
+    type: 'website',
+    siteName: 'Tools Collection',
+    images: [
+      {
+        url: 'https://i.ibb.co/v6sxPmTP/file-00000000348481fa9ff18e206e8219a9.png',
+        width: 1200,
+        height: 630,
+        type: 'image/png',
+        alt: 'Tools Collection - SANN404 FORUM GROUP',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Tools Collection | SANN404 FORUM GROUP',
+    description:
+      'Explore the directory of web tools, websites, utilities, and projects curated and maintained by SANN404 FORUM GROUP.',
+    images: ['https://i.ibb.co/v6sxPmTP/file-00000000348481fa9ff18e206e8219a9.png'],
+  },
+};
 
 export const revalidate = 0; // Ensures fresh data while Supabase Realtime handles live updates
 
