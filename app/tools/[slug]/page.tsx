@@ -77,18 +77,46 @@ export async function generateMetadata({ params }: ToolDetailPageProps): Promise
 
   if (!tool) {
     return {
-      title: 'Tool Not Found - Tool Collection',
+      title: 'Tool Not Found - Tools Collection',
       description: 'The requested tool could not be located.',
     };
   }
 
+  const primaryImage =
+    tool.thumbnail_url ||
+    tool.logo_url ||
+    'https://i.ibb.co/v6sxPmTP/file-00000000348481fa9ff18e206e8219a9.png';
+
+  const desc =
+    tool.short_description ||
+    (tool.description ? tool.description.slice(0, 160) : 'Web tool curated by SANN404 FORUM GROUP.');
+
   return {
-    title: `${tool.name} - Tool Collection`,
-    description: tool.short_description || tool.description.slice(0, 150),
+    title: `${tool.name} | Tools Collection - SANN404 FORUM GROUP`,
+    description: desc,
     openGraph: {
-      title: `${tool.name} - Tool Collection`,
-      description: tool.short_description || tool.description.slice(0, 150),
-      images: tool.thumbnail_url || tool.logo_url ? [{ url: tool.thumbnail_url || tool.logo_url || '' }] : [],
+      title: `${tool.name} | Tools Collection - SANN404 FORUM GROUP`,
+      description: desc,
+      url: `https://project.saannndec5ty.my.id/tools/${tool.slug}`,
+      type: 'website',
+      siteName: 'Tools Collection',
+      images: [
+        {
+          url: primaryImage,
+          width: 1200,
+          height: 630,
+          alt: tool.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${tool.name} | Tools Collection - SANN404 FORUM GROUP`,
+      description: desc,
+      images: [primaryImage],
+    },
+    other: {
+      image_src: primaryImage,
     },
   };
 }
