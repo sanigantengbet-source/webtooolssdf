@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
@@ -189,10 +190,14 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
             {/* Circular Avatar / Logo */}
             <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-full border border-[#eaeaea] dark:border-[#27272a] bg-white dark:bg-[#18181b] flex items-center justify-center overflow-hidden">
               {tool.logo_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={tool.logo_url}
                   alt={`${tool.name} logo`}
+                  width={80}
+                  height={80}
+                  sizes="(max-width: 640px) 64px, 80px"
+                  priority
+                  referrerPolicy="no-referrer"
                   className="h-full w-full object-cover"
                 />
               ) : (
@@ -226,10 +231,14 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
         {/* Thumbnail Preview if present */}
         {tool.thumbnail_url && (
           <div className="mb-8 rounded-lg border border-[#eaeaea] dark:border-[#27272a] overflow-hidden bg-[#fafafa] dark:bg-[#111111]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={tool.thumbnail_url}
               alt={`${tool.name} preview`}
+              width={1200}
+              height={630}
+              sizes="(max-width: 896px) 100vw, 896px"
+              loading="lazy"
+              referrerPolicy="no-referrer"
               className="w-full h-auto max-h-[420px] object-cover"
             />
           </div>
