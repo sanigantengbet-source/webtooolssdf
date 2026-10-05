@@ -1,6 +1,6 @@
 {
-  "name": "Tools Collection",
-  "description": "A curated collection of web tools, websites and projects created and maintained by SANN404 FORUM GROUP",
+  "name": "SANN404 FORUM GROUP | Curated Tools Collection",
+  "description": "A centralized hub of hand-crafted web tools, utilities, automation resources, and projects built to empower modern developers and digital explorers.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
