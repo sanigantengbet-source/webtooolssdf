@@ -1,13 +1,18 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ExternalLink, ArrowRight, Clock, Layers } from 'lucide-react';
 import type { Tool } from '@/lib/types';
 
 interface ToolCardProps {
   tool: Tool;
+  priority?: boolean;
 }
 
-export function ToolCard({ tool }: ToolCardProps) {
+export function ToolCard({ tool, priority = false }: ToolCardProps) {
+  const [imageError, setImageError] = useState(false);
   // Format last updated date
   const updatedDate = new Date(tool.updated_at).toLocaleDateString('en-US', {
     month: 'short',
@@ -54,13 +59,18 @@ export function ToolCard({ tool }: ToolCardProps) {
         <div className="flex items-start justify-between gap-3 mb-3.5">
           <div className="flex items-center gap-3">
             <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-[#eaeaea] dark:border-[#27272a] bg-[#fafafa] dark:bg-[#181818] overflow-hidden">
-              {tool.logo_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+              {tool.logo_url && !imageError ? (
+                <Image
                   src={tool.logo_url}
                   alt={`${tool.name} logo`}
+                  width={40}
+                  height={40}
+                  sizes="40px"
+                  priority={priority}
+                  loading={priority ? 'eager' : 'lazy'}
+                  referrerPolicy="no-referrer"
                   className="h-full w-full object-contain p-1"
-                  loading="lazy"
+                  onError={() => setImageError(true)}
                 />
               ) : (
                 <span className="text-sm font-semibold uppercase tracking-wider text-[#171717] dark:text-[#ededed]">
@@ -71,7 +81,7 @@ export function ToolCard({ tool }: ToolCardProps) {
             <div>
               <Link
                 href={`/tools/${tool.slug}`}
-                prefetch={true}
+                prefetch={false}
                 className="font-medium text-base text-[#171717] dark:text-[#ededed] group-hover:underline underline-offset-4 focus:outline-none"
               >
                 {tool.name}
@@ -128,7 +138,7 @@ export function ToolCard({ tool }: ToolCardProps) {
         <div className="flex items-center gap-2">
           <Link
             href={`/tools/${tool.slug}`}
-            prefetch={true}
+            prefetch={false}
             className="inline-flex items-center gap-1 text-xs font-medium text-[#171717] dark:text-[#ededed] hover:opacity-80 py-1 transition-transform active:scale-95"
           >
             Details
