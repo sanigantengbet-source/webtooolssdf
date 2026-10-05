@@ -59,55 +59,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>SANN404 FORUM GROUP | Curated Tools Collection</title>
-        <meta
-          name="description"
-          content="A centralized hub of hand-crafted web tools, utilities, automation resources, and projects built to empower modern developers and digital explorers."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://project.saannndec5ty.my.id" />
-        <meta property="og:site_name" content="Tools Collection" />
-        <meta property="og:locale" content="id_ID" />
-        <meta property="og:title" content="SANN404 FORUM GROUP | Curated Tools Collection" />
-        <meta
-          property="og:description"
-          content="A centralized hub of hand-crafted web tools, utilities, automation resources, and projects built to empower modern developers and digital explorers."
-        />
-        <meta
-          property="og:image"
-          content="https://i.ibb.co/v6sxPmTP/file-00000000348481fa9ff18e206e8219a9.png"
-        />
-        <meta
-          property="og:image:secure_url"
-          content="https://i.ibb.co/v6sxPmTP/file-00000000348481fa9ff18e206e8219a9.png"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:alt" content="Tools Collection - SANN404 FORUM GROUP" />
-        <meta property="og:image" content="https://project.saannndec5ty.my.id/og-image.jpg" />
-        <meta property="og:image:secure_url" content="https://project.saannndec5ty.my.id/og-image.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="628" />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="SANN404 FORUM GROUP | Curated Tools Collection" />
-        <meta
-          name="twitter:description"
-          content="A centralized hub of hand-crafted web tools, utilities, automation resources, and projects built to empower modern developers and digital explorers."
-        />
-        <meta
-          name="twitter:image"
-          content="https://i.ibb.co/v6sxPmTP/file-00000000348481fa9ff18e206e8219a9.png"
-        />
-        <link
-          rel="image_src"
-          href="https://i.ibb.co/v6sxPmTP/file-00000000348481fa9ff18e206e8219a9.png"
-        />
-      </head>
       <body className="antialiased bg-black text-[#ededed] min-h-screen">
         <ThemeProvider>
           <Suspense fallback={null}>
