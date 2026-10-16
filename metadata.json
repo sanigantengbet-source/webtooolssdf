@@ -1,6 +1,6 @@
 {
-  "name": "SpotiFlow - Spotify Audio & Cover Downloader",
-  "description": "High-fidelity Spotify music and artwork extractor. Download 320kbps MP3 tracks, lossless album covers, and complete track metadata with instant browser preview.",
+  "name": "Tools Collection",
+  "description": "A curated collection of web tools, websites and projects created and maintained by SANN404 FORUM GROUP",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
