@@ -1,6 +1,6 @@
 {
-  "name": "SANN404 FORUM GROUP | Curated Tools Collection",
-  "description": "A centralized hub of hand-crafted web tools, utilities, automation resources, and projects built to empower modern developers and digital explorers.",
+  "name": "SpotiFlow - Spotify Audio & Cover Downloader",
+  "description": "High-fidelity Spotify music and artwork extractor. Download 320kbps MP3 tracks, lossless album covers, and complete track metadata with instant browser preview.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
